@@ -84,7 +84,7 @@ def show_articles(articles: list, selected: int = 0):
                        border_style=ORANGE, box=box.ROUNDED))
 
 
-def show_article_detail(article: dict, content: str, source_info: str):
+def show_article_detail(article: dict, content: str = None, source_info: str = None):
     """Display article detail."""
     clear_screen()
     show_header()
@@ -97,7 +97,7 @@ def show_article_detail(article: dict, content: str, source_info: str):
     text.append("  •  ", style="dim")
     text.append(article.get("published", ""), style="dim")
     
-    if source_info.startswith("alternative"):
+    if source_info and source_info.startswith("alternative"):
         text.append("\n")
         text.append("🔄 Content from: ", style="bold dim")
         text.append(source_info.replace("alternative: ", ""), style="cyan")
@@ -107,13 +107,13 @@ def show_article_detail(article: dict, content: str, source_info: str):
     text.append("\n\n")
     
     if content:
-        # Truncate very long content for display
+        # Show full content
         if len(content) > 2000:
-            content = content[:2000] + "\n\n[...truncated, open in browser for full article]"
+            content = content[:2000] + "\n\n[...truncated]"
         text.append(content)
     else:
+        # Show description/summary only
         text.append(article.get("description", "No description."))
-        text.append("\n\n[Could not fetch full article]", style="dim italic")
     
     text.append("\n\n")
     text.append("─" * 50, style="dim")
@@ -123,8 +123,7 @@ def show_article_detail(article: dict, content: str, source_info: str):
     console.print(Panel(text, title=f"[bold {ORANGE}]📰 ARTICLE[/]", 
                        border_style=ORANGE, box=box.ROUNDED))
     
-    console.print("\n[dim]Press Enter to go back...[/]")
-    input()
+    return content is None  # Return True if we need to offer full fetch option
 
 
 def main():
@@ -197,12 +196,25 @@ def main():
             idx = int(choice) - 1
             article = articles[idx]
             
-            console.print("[dim]Fetching full article...[/]")
-            content, source_info = scraper.fetch_article(
-                article.get("url"), 
-                article.get("title")
-            )
-            show_article_detail(article, content, source_info)
+            # Show summary first (fast!)
+            needs_fetch = show_article_detail(article)
+            
+            if needs_fetch:
+                console.print("\n[dim][F] Fetch full article  [Enter] Back[/] ", end="")
+                sub_choice = input().strip().lower()
+                
+                if sub_choice == 'f':
+                    console.print("[dim]Fetching full article...[/]")
+                    content, source_info = scraper.fetch_article(
+                        article.get("url"), 
+                        article.get("title")
+                    )
+                    show_article_detail(article, content, source_info)
+                    console.print("\n[dim]Press Enter to go back...[/]")
+                    input()
+            else:
+                console.print("\n[dim]Press Enter to go back...[/]")
+                input()
 
 
 if __name__ == "__main__":
