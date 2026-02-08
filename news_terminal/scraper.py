@@ -39,11 +39,17 @@ class ArticleScraper:
     
     def __init__(self):
         self.session = requests.Session()
+        # Use mobile user-agent for better compatibility
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
         })
+        # Disable SSL verification for Termux compatibility
+        self.session.verify = False
+        # Suppress SSL warnings
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     
     def fetch_article(self, url: str, title: str = None) -> Tuple[Optional[str], str]:
         """
@@ -78,10 +84,14 @@ class ArticleScraper:
             return None
         
         try:
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(url, timeout=15)
             response.raise_for_status()
             
-            soup = BeautifulSoup(response.text, 'lxml')
+            # Try lxml first, fall back to html.parser
+            try:
+                soup = BeautifulSoup(response.text, 'lxml')
+            except Exception:
+                soup = BeautifulSoup(response.text, 'html.parser')
             
             # Remove unwanted elements
             for selector in self.REMOVE_SELECTORS:
