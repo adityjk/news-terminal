@@ -1,0 +1,28 @@
+Collecting textual
+  Downloading textual-7.5.0-py3-none-any.whl.metadata (9.1 kB)
+Requirement already satisfied: markdown-it-py>=2.1.0 in ./venv/lib/python3.12/site-packages (from markdown-it-py[linkify]>=2.1.0->textual) (4.0.0)
+Collecting mdit-py-plugins (from textual)
+  Downloading mdit_py_plugins-0.5.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting platformdirs<5,>=3.6.0 (from textual)
+  Using cached platformdirs-4.5.1-py3-none-any.whl.metadata (12 kB)
+Requirement already satisfied: pygments<3.0.0,>=2.19.2 in ./venv/lib/python3.12/site-packages (from textual) (2.19.2)
+Requirement already satisfied: rich>=14.2.0 in ./venv/lib/python3.12/site-packages (from textual) (14.3.2)
+Collecting typing-extensions<5.0.0,>=4.4.0 (from textual)
+  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: mdurl~=0.1 in ./venv/lib/python3.12/site-packages (from markdown-it-py>=2.1.0->markdown-it-py[linkify]>=2.1.0->textual) (0.1.2)
+Collecting linkify-it-py<3,>=1 (from markdown-it-py[linkify]>=2.1.0->textual)
+  Downloading linkify_it_py-2.0.3-py3-none-any.whl.metadata (8.5 kB)
+Collecting uc-micro-py (from linkify-it-py<3,>=1->markdown-it-py[linkify]>=2.1.0->textual)
+  Downloading uc_micro_py-1.0.3-py3-none-any.whl.metadata (2.0 kB)
+Downloading textual-7.5.0-py3-none-any.whl (718 kB)
+   ━━ 71… 4… eta 0:0…
+      kB  M…         
+Using cached platformdirs-4.5.1-py3-none-any.whl (18 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Downloading mdit_py_plugins-0.5.0-py3-none-any.whl (57 kB)
+   ━━ 57… 5… eta 0:0…
+      kB  M…         
+Downloading linkify_it_py-2.0.3-py3-none-any.whl (19 kB)
+Downloading uc_micro_py-1.0.3-py3-none-any.whl (6.2 kB)
+Installing collected packages: uc-micro-py, typing-extensions, platformdirs, mdit-py-plugins, linkify-it-py, textual
+Successfully installed linkify-it-py-2.0.3 mdit-py-plugins-0.5.0 platformdirs-4.5.1 textual-7.5.0 typing-extensions-4.15.0 uc-micro-py-1.0.3

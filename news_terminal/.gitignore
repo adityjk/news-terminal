@@ -1,0 +1,6 @@
+# Ignore
+venv/
+__pycache__/
+*.pyc
+config.json
+.env
