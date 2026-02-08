@@ -132,12 +132,22 @@ class NewsTerminalApp(App):
         height: 3;
         background: #1a1a1a;
         border-bottom: solid #FF9500;
-        padding: 0 2;
+        padding: 0 1;
     }
     
-    #header-bar Static {
+    #header-title {
         color: #FF9500;
         text-style: bold;
+        width: 1fr;
+    }
+    
+    #header-bar Button {
+        min-width: 8;
+        margin-left: 1;
+    }
+    
+    #quit-btn {
+        background: #cc0000;
     }
     
     #categories {
@@ -239,8 +249,10 @@ class NewsTerminalApp(App):
         }
     
     def compose(self) -> ComposeResult:
-        yield Container(
-            Static(f"██ NEWS TERMINAL  │  {datetime.now().strftime('%H:%M • %d %b %Y')}"),
+        yield Horizontal(
+            Static(f"██ NEWS TERMINAL  │  {datetime.now().strftime('%H:%M • %d %b %Y')}", id="header-title"),
+            Button("🔄", id="refresh-btn", variant="default"),
+            Button("❌ Quit", id="quit-btn", variant="error"),
             id="header-bar"
         )
         yield Horizontal(
@@ -330,6 +342,16 @@ class NewsTerminalApp(App):
         """Open article in browser."""
         if self.current_article and self.current_article.get("url"):
             webbrowser.open(self.current_article["url"])
+    
+    @on(Button.Pressed, "#quit-btn")
+    def on_quit_pressed(self) -> None:
+        """Quit the app."""
+        self.exit()
+    
+    @on(Button.Pressed, "#refresh-btn")
+    def on_refresh_pressed(self) -> None:
+        """Manual refresh."""
+        self.action_refresh()
     
     @on(Button.Pressed, "#categories Button")
     def on_category_pressed(self, event: Button.Pressed) -> None:
