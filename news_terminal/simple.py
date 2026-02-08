@@ -47,11 +47,11 @@ def show_header():
 def show_menu():
     """Display category menu."""
     menu = Text()
-    menu.append("[1] Headlines  ", style=f"bold {ORANGE}")
-    menu.append("[2] Business  ", style=SOFT_ORANGE)
-    menu.append("[3] Tech  ", style=SOFT_ORANGE)
-    menu.append("[4] Sports  ", style=SOFT_ORANGE)
-    menu.append("[5] Health  ", style=SOFT_ORANGE)
+    menu.append("[H] Headlines  ", style=f"bold {ORANGE}")
+    menu.append("[B] Business  ", style=SOFT_ORANGE)
+    menu.append("[T] Tech  ", style=SOFT_ORANGE)
+    menu.append("[S] Sports  ", style=SOFT_ORANGE)
+    menu.append("[E] Health  ", style=SOFT_ORANGE)
     menu.append("  │  ", style="dim")
     menu.append("[R] Refresh  ", style="dim")
     menu.append("[Q] Quit", style="dim")
@@ -141,14 +141,22 @@ def main():
     scraper = ArticleScraper()
     
     categories = {
-        "1": "general",
-        "2": "business",
-        "3": "technology",
-        "4": "sports",
-        "5": "health",
+        "h": "general",
+        "b": "business",
+        "t": "technology",
+        "s": "sports",
+        "e": "health",
     }
     
-    current_category = "1"
+    category_names = {
+        "h": "Headlines",
+        "b": "Business",
+        "t": "Technology",
+        "s": "Sports",
+        "e": "Health",
+    }
+    
+    current_category = "h"
     articles = []
     
     # Load initial news
@@ -162,7 +170,7 @@ def main():
         show_menu()
         show_articles(articles)
         
-        console.print("\n[dim]Enter number (1-10) to read, or command (1-5, R, Q):[/] ", end="")
+        console.print("\n[dim]Enter 1-10 to read article, or H/B/T/S/E/R/Q:[/] ", end="")
         
         try:
             choice = input().strip().lower()
@@ -181,7 +189,7 @@ def main():
         
         elif choice in categories:
             current_category = choice
-            console.print("[dim]Loading...[/]")
+            console.print(f"[dim]Loading {category_names[choice]}...[/]")
             result = client.get_top_headlines(category=categories[current_category])
             articles = [client.format_article(a) for a in result.get("articles", [])]
         
